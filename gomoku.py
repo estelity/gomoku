@@ -26,14 +26,18 @@ def redrawAll(app):
         for j in range(0, 19):
             if app.board[i][j] == 1:
                 drawImage(app.whiteUrl, 27+32*i, 27+32*j)
+                lastRow = i
+                lastCol = j
             if app.board[i][j] == 2:
                 drawImage(app.blackUrl, 27+32*i, 27+32*j)
+                lastRow = i
+                lastCol = j
     
     # draw win screen or not
-    if checkWon():
-        pass
+    if checkWon(app, lastRow, lastCol):
+        drawLabel("yippee", 750, 300)
     else:
-        pass
+        drawLabel("not yet", 750, 300)
 
 def onMouseMove(app, mouseX, mouseY):
     pass
@@ -54,8 +58,29 @@ def swapTurn(app):
     elif app.turn ==2:
         app.turn=1
 
-def checkWon():
+def checkWon(app, lastRow, lastCol):
+    directions = [[0,1], [1,0], [1,-1], [1, 1]]
+    found = True
+    
+    for dir in directions:
+        for i in range(4, -1, -1):
+            startRow = lastRow - (abs(dir[0])*i)
+            startCol = lastCol - (abs(dir[1])*i) 
+            if 0<=startRow<= 15 and 0<=startCol<=15:
+                found = True
+                for j in range(0, 5):
+                    if app.turn==1:
+                        if app.board[startRow+j][startCol+j] != 1:
+                            found = False
+                    elif app.turn==2:
+                        if app.board[startRow+j][startCol+j] !=2:
+                            found = False
+                if found:
+                    return True
+                
     return False
+                            
+
 
 def reset():
     app.board = [[0]*19 for i in range(0, 19)]
