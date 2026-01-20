@@ -50,6 +50,11 @@ lastCol = 0
 
 done = False
 
+ghostWhite = whiteUrl.convert_alpha()
+ghostWhite.set_alpha(100)
+ghostBlack = blackUrl.convert_alpha()
+ghostBlack.set_alpha(100)
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -83,7 +88,7 @@ while running:
         done = True
         screen.blit(winUrl, (0,0))
         if turn==1:
-            screen.blit(bBlackUrl, 680, 150)
+            screen.blit(bBlackUrl, (680, 150))
         else:
             screen.blit(bWhiteUrl, (680, 150))
     else:
@@ -99,9 +104,9 @@ while running:
         boxNumY = (mousePos[1]-27)//32
         if 0 <= boxNumX < 19 and 0 <= boxNumY < 19 and board[boxNumX][boxNumY] == 0 and not done:
             if turn==1:
-                # draw white ghost piece
+                screen.blit(ghostWhite, (boxNumX*32+27, boxNumY*32+27))
             if turn==2:
-                # draw black ghost piece
+                screen.blit(ghostBlack, (boxNumX*32+27, boxNumY*32+27))
 
     # draw in title and reset button (always visible)
     screen.blit(titleUrl, (0, 0))
